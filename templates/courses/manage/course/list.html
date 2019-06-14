@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}User courses{% endblock %}
+
+{% block content %}
+<h1 class="w3-center">This is all courses created by <span class="w3-text-blue">{{ user.username }}</span>.</h1>
+<div class="module w3-container">
+    {% for course in object_list %}
+        <div class="course-info w3-card w3-container w3-theme-l2 w3-margin">
+        <h3>{{ course.title }}</h3>
+             <p class="w3-text-teal w3-hover">
+                 <a href="{% url 'course_edit' course.id %}" class="w3-hover-text-dark-grey">Edit</a>
+                 <a href="{% url 'course_delete' course.id %}" class="w3-hover-text-dark-grey">Delete</a>
+                 <a href="{% url 'course_module_update' course.id %}" class="w3-hover-text-dark-grey">Edit Module</a>
+                 {% if course.modules.count > 0 %}
+                     <a href="{% url 'module_content_list' course.modules.first.id %}" class="w3-hover-text-dark-grey">Manage contents</a>
+                 {% endif %}
+             </p>
+        </div>
+    {% empty %}
+        <p>You haven't created any courses yet.</p>
+    {% endfor %}
+        <p class="w3-container">
+            <a href="{% url 'course_create' %}" class="button w3-button w3-theme">Create new course</a>
+        </p>
+</div>
+{% endblock %}

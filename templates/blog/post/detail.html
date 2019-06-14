@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<!-- Page content -->
+<div class="w3-content" style="max-width:2000px;margin-top:1px">
+  <!-- Automatic Slideshow Images -->
+  <div class="w3-display-container w3-center">
+    <img src="{% static 'images/2.jpg' %}" style="width:100%;max-height:500px">
+  </div>
+
+
+
+  <!-- The Post body Section -->
+  <div class="w3-container w3-content" style="max-width:800px" id="band">
+
+    <div class="w3-card w3-margin-top">
+
+    <div class="w3-container w3-padding">
+    <h2 class="w3-wide">{{ post.title }}</h2>
+    <p class="w3-opacity"><i>Published {{ post.publish }} by {{ post.author }}</i></p>
+    </div>
+    <div class="w3-container w3-white">
+    <p class="w3-justify">{{ post.body|linebreaks }}</p>
+    </div>
+
+
+    <div class="w3-container w3-row w3-padding-32">
+      <div class="w3-third">
+        <p>Name</p>
+        <img src="{% static 'images/2.jpg' %}" class="w3-margin-bottom" alt="Random Name" style="width:95%">
+      </div>
+      <div class="w3-third">
+        <p>Name</p>
+        <img src="{% static 'images/1.jpg' %}" class="w3-margin-bottom" alt="Random Name" style="width:95%">
+      </div>
+      <div class="w3-third">
+        <p>Name</p>
+        <img src="{% static 'images/3.jpg' %}" class="" alt="Random Name" style="width:95%">
+      </div>
+    </div>
+
+    </div>
+
+
+    <div class="w3-container">
+    <div class="w3-card">
+    <p class="w3-left"><button class="w3-button w3-theme w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>
+    <p class="w3-left"><button class="w3-button w3-theme w3-border" onclick="hideBlogCommentsFunctionByStyle('demo12')" id="myBtn"><b><i class="fa fa-comment"></i></b> Comment</button></p>
+    <a href="{% url 'blog:post_share' post.id %}"><p class="w3-left"><button class="w3-button w3-theme w3-border"><b><i class="fa fa-share"></i></b> Share this post</button></p></a>
+    </div>
+    </div>
+    <hr>
+
+         <div class="w3-container">
+          <div class="w3-card w3-margin-bottom w3-theme-l5 w3-small" id="demo12" style="display:none">
+            <div class="w3-container">
+
+          {% if new_comment %}
+            <h2>Your comment has been added.</h2>
+          {% else %}
+            <h2>Add a new comment</h2>
+            <form action="." method="post" class="w3-theme-l5 w3-input w3-large">
+              {{ comment_form.as_p }}
+              {% csrf_token %}
+              <p><input type="submit" value="Add comment"></p>
+            </form>
+          {% endif %}
+              </div>
+          </div>
+         </div>
+
+
+      <!-- Similar Posts -->
+  <div class="w3-card w3-margin-top">
+    <div class="w3-container w3-padding">
+      <h4>Similar posts</h4>
+    </div>
+
+
+    <ul class="w3-ul w3-hoverable w3-white">
+        {% for post in similar_posts %}
+        <a href="{{ post.get_absolute_url }}">
+      <li class="w3-padding-16 w3-hide-medium w3-hide-small">
+        <img src="{% static 'images/2.jpg' %}" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">{{ post.title }}</span><br>
+        <span>{{ post.body|truncatewords:10|linebreaks }}</span>
+      </li>
+        </a>
+        {% endfor %}
+    </ul>
+  </div>
+  <hr>
+
+    <p class="w3-clear"></p>
+    <!-- Example of comment field -->
+          <div class="w3-container">
+            {% with comments.count as total_comments %}
+                 <h4>
+             {{ total_comments }} comment{{ total_comments|pluralize }}
+                  </h4>
+             {% endwith %}
+          </div>
+
+
+
+
+
+          <div class="w3-row w3-margin-bottom w3-theme-l5 w3-small" id="demo11" style="display:block">
+            <hr>
+             {% for comment in comments %}
+              <div class="w3-col l2 m3">
+                <img src="{% static 'images/3.jpg' %}" style="width:90px;">
+              </div>
+              <div class="w3-col l10 m9">
+                <h4>{{ comment.owner }}<span class="w3-opacity w3-medium"> {{ comment.created }}  #{{ forloop.counter }}</span></h4>
+                <p>{{ comment.body|linebreaks }}</p>
+              </div>
+            {% empty %}
+                  <p>There are no comments yet.</p>
+            {% endfor %}
+          </div>
+    <hr>
+
+
+
+  </div>
+
+<!-- End Page Content -->
+</div>
+
+{% endblock %}

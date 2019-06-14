@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load blog_tags %}
+
+{% block title %}My Blog{% endblock %}
+
+{% block content %}
+<!-- w3-content defines a container for fixed size centered content,
+and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1400px">
+<br>
+<br>
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32">
+  <h1><b>ПОСЛЕДНИЕ ПОСТЫ</b></h1>
+  <p>Currently <a href="{% url 'blog:post_list'%}"><span class="w3-tag">{% total_posts %} Posts</span></a> on Site</p>
+</header>
+
+
+<!-- Grid -->
+<div class="w3-row">
+
+<!-- Blog entries -->
+<div class="w3-col l8 s12">
+
+
+
+  <!-- Blog entry -->
+  {% if tag %}
+  <div class="w3-container">
+    <h2>{{ tagged_posts }} Posts tagged with <span class="w3-tag">{{ tag.name }}</span></h2>
+  </div>
+  {% endif %}
+
+  {% for post in posts %}
+  <div class="w3-card-4 w3-margin w3-white">
+    <img src="{% static 'images/1.jpg' %}" alt="Nature" style="width:100%">
+    <div class="w3-container">
+      <h3><b>{{ post.title }}</b></h3>
+       <p>
+         {% if post.tags.all %}
+      Tags:
+         {% endif %}
+      {% for tag in post.tags.all %}
+      <a href="{% url 'blog:post_list_by_tag' tag.slug %}">
+        <span class="w3-tag">{{ tag.name }}</span>
+      </a>
+
+      {% endfor %}
+       </p>
+      <h5><span class="w3-opacity">Published {{ post.publish }} by {{ post.author }}</span></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>{{ post.body|truncatewords:60|linebreaks }}</p>
+      <div class="w3-row">
+        <div class="w3-col m8 s12">
+          <a href="{{ post.get_absolute_url }}">
+          <p><button class="w3-button w3-padding-large w3-white w3-border" href="{{ post.get_absolute_url }}"><b>READ MORE »</b></button></p>
+          </a>
+        </div>
+        <div class="w3-col m4 w3-hide-small">
+          <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag">0</span></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  {% endfor %}
+
+  {% include "blog/pagination.html" with page=posts %}
+
+<!-- END BLOG ENTRIES -->
+</div>
+
+
+
+<!-- Introduction menu -->
+<div class="w3-col l4">
+  <!-- About Card -->
+  <div class="w3-card w3-margin w3-margin-top">
+  <img src="{% static 'images/3.jpg' %}" style="width:100%">
+    <div class="w3-container w3-white">
+      <h4><b>My Name</b></h4>
+      <p>Just me, myself and I, exploring the universe of uknownment. I have a heart of love and a interest of lorem ipsum and mauris neque quam blog. I want to share my world with you.</p>
+    </div>
+  </div><hr>
+
+  <!-- Latest Posts -->
+  {% show_latest_posts 3 %}
+  <hr>
+
+
+  <!-- Most commented posts -->
+  {% get_most_commented_posts as most_commented_posts %}
+    <div class="w3-card w3-margin">
+    <div class="w3-container w3-padding">
+      <h4>Most commented Posts</h4>
+    </div>
+    <ul class="w3-ul w3-hoverable w3-white">
+        {% for post in most_commented_posts %}
+      <a href="{{ post.get_absolute_url }}">
+      <li class="w3-padding-16">
+        <img src="{% static 'images/1.jpg' %}" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">{{ post.author }} </span><br>
+        <span>{{ post.title }}  <i class="fa fa-comment"></i>    {{ post.comments.count }}</span>
+      </li>
+      </a>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+
+
+
+  <!-- Labels / tags -->
+  <div class="w3-card w3-margin">
+    <div class="w3-container w3-padding">
+      <h4>Tags</h4>
+    </div>
+    <div class="w3-container w3-white">
+    <p>
+
+      {% for tag in tags.all %}
+      <a href="{% url 'blog:post_list_by_tag' tag.slug %}">
+      <span class="w3-tag w3-black w3-small w3-margin-bottom"> {{ tag.name }} </span>
+      </a>
+      {% endfor %}
+
+    </p>
+    </div>
+  </div>
+
+<!-- END Introduction Menu -->
+</div>
+
+<!-- END GRID -->
+</div><br>
+
+</div>
+{% endblock content%}
