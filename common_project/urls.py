@@ -33,7 +33,7 @@ urlpatterns = [
     #this is home page common for all apps.....
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('images/', include('app_images.urls', namespace='images')),
-    path('course/', include('app_courses.urls')),
+    path('post/', include('app_posts.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load course %}
+
+{% block title %}
+Post: {{ post.title }}
+{% endblock %}
+
+
+{% block content %}
+<div class="module">
+    <h2>Post {{ post.title }}</h2>
+    <h3>Post contents:</h3>
+    <div id="module-contents">
+        {% for content in post.contents.all %}
+            <div data-id="{{ content.id }}">
+                {% with item=content.item %}
+                    <p>{{ item }} ({{ item|model_name }})</p>
+                    <a href="{% url 'post_content_update' post.id item|model_name item.id %}">Edit</a>
+                    <form action="{% url 'post_content_delete' content.id %}" method="post">
+                        <input type="submit" value="Delete">
+                        {% csrf_token %}
+                    </form>
+                {% endwith %}
+            </div>
+        {% empty %}
+            <p>This module has no contents yet.</p>
+        {% endfor %}
+    </div>
+    <h3>Add new content:</h3>
+    <ul class="content-types">
+        <li><a href="{% url 'post_content_create' post.id 'text' %}"> Text</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'image' %}"> Image</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'video' %}"> Video</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'file' %}"> File</a></li>
+    </ul>
+</div>
+
+{% endblock %}

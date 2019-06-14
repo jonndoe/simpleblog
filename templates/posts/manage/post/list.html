@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}My courses{% endblock %}
+
+{% block content %}
+<h1>My posts (posts/manage/post/list.html)</h1>
+    <div class="module">
+        {% for post in object_list %}
+            <div class="course-info">
+            <h3>{{ post.title }}</h3>
+            <p>
+            <a href="{% url 'post_edit' post.id %}">Edit</a>
+            <a href="{% url 'post_delete' post.id %}">Delete</a>
+            <a href="{% url 'post_content_list' post.first.id %}">Manage contents</a>
+            </p>
+            </div>
+        {% empty %}
+            <p>You haven't created any posts yet.</p>
+        {% endfor %}
+        <p>
+            <a href="{% url 'post_create' %}" class="button w3-button w3-green">Create new post</a>
+        </p>
+    </div>
+{% endblock %}

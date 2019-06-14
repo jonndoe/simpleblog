@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'app_blog.apps.AppBlogConfig',
     'app_images.apps.AppImagesConfig',
     'app_actions.apps.AppActionsConfig',
-    'app_courses.apps.AppCoursesConfig',
+    'app_posts.apps.AppPostsConfig',
     # 3 party
     'crispy_forms',
     'taggit',
