@@ -9,13 +9,13 @@ Post: {{ post.title }}
 
 {% block content %}
 <div class="module">
-    <h2>Post {{ post.title }}</h2>
+    <h2>Post {{ post.title }}( posts/manage/post/content_list.html )</h2>
     <h3>Post contents:</h3>
     <div id="module-contents">
         {% for content in post.contents.all %}
-            <div data-id="{{ content.id }}">
+            <div data-id="{{ content.id }}" class="w3-container w3-yellow w3-margin">
                 {% with item=content.item %}
-                    <p>{{ item }} ({{ item|model_name }})</p>
+                    <p>{{ item }} ({{ item|model_name }}) <span class="order">{{ content.order|add:1 }}</span></p>
                     <a href="{% url 'post_content_update' post.id item|model_name item.id %}">Edit</a>
                     <form action="{% url 'post_content_delete' content.id %}" method="post">
                         <input type="submit" value="Delete">
@@ -29,11 +29,33 @@ Post: {{ post.title }}
     </div>
     <h3>Add new content:</h3>
     <ul class="content-types">
-        <li><a href="{% url 'post_content_create' post.id 'text' %}"> Text</a></li>
-        <li><a href="{% url 'post_content_create' post.id 'image' %}"> Image</a></li>
-        <li><a href="{% url 'post_content_create' post.id 'video' %}"> Video</a></li>
-        <li><a href="{% url 'post_content_create' post.id 'file' %}"> File</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'text' %}" class="w3-green w3-hover"> Text</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'image' %}" class="w3-green w3-hover"> Image</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'video' %}" class="w3-green w3-hover"> Video</a></li>
+        <li><a href="{% url 'post_content_create' post.id 'file' %}" class="w3-green w3-hover"> File</a></li>
     </ul>
 </div>
 
+{% endblock %}
+
+{% block domready %}
+    $('#module-contents').sortable({
+        stop: function(event, ui) {
+            contents_order = {};
+            $('#module-contents').children().each(function(){
+			    // update the order field
+                $(this).find('.order').text($(this).index() + 1);
+                // associate the module's id with its order
+                contents_order[$(this).data('id')] = $(this).index();
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "content_order" %}',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(contents_order),
+            });
+        }
+    });
 {% endblock %}

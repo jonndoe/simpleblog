@@ -14,8 +14,8 @@ urlpatterns = [
     path('post/<int:post_id>/content/<model_name>/<id>/', views.ContentCreateUpdateView.as_view(),
          name='post_content_update'),
 
-    path('content/<int:id>/delete/',
-         views.ContentDeleteView.as_view(), name='post_content_delete'),
-
+    path('content/<int:id>/delete/',views.ContentDeleteView.as_view(), name='post_content_delete'),
     path('post/<int:post_id>/', views.PostContentListView.as_view(), name='post_content_list'),
+
+    path('content/order/', views.ContentOrderView.as_view(), name='content_order'),
 ]
