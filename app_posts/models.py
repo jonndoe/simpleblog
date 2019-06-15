@@ -72,9 +72,9 @@ class ItemBase(models.Model):
     class Meta:
         abstract = True
 
-    #def render(self):
-        #return render_to_string('courses/content/{}.html'.format(
-            #self._meta.model_name), {'item': self})
+    def render(self):
+        return render_to_string('posts/content/{}.html'.format(
+            self._meta.model_name), {'item': self})
 
     def __str__(self):
         return self.title

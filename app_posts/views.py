@@ -158,6 +158,37 @@ class ContentOrderView(CsrfExemptMixin,
 
 
 
+
+
+class PostListView(TemplateResponseMixin, View):
+    model = Post
+    template_name = 'posts/post/list.html'
+
+    def get(self, request, subject=None):
+        subjects = Subject.objects.annotate(
+            total_posts=Count('posts'))
+        posts = Post.objects.annotate(
+            total_contents=Count('contents'))
+        if subject:
+            subject = get_object_or_404(Subject, slug=subject)
+            posts = posts.filter(subject=subject)
+
+        return self.render_to_response({'subjects': subjects,
+                                        'subject': subject,
+                                        'posts': posts})
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'posts/post/detail.html'
+
+
+
+
+
+
+
+
 '''
 class PostOrderView(CsrfExemptMixin,
                       JsonRequestResponseMixin,
@@ -190,21 +221,7 @@ class AllCourseListView(ListView):
     template_name = 'courses/manage/course/all_list.html'
 
 
-class CourseListView(TemplateResponseMixin, View):
-    model = Course
-    template_name = 'courses/course/list.html'
 
-    def get(self, request, subject=None):
-        subjects = Subject.objects.annotate(
-            total_courses=Count('courses'))
-        courses = Course.objects.annotate(
-            total_modules=Count('modules'))
-        if subject:
-            subject = get_object_or_404(Subject, slug=subject)
-            courses = courses.filter(subject=subject)
-        return self.render_to_response({'subjects': subjects,
-                                        'subject': subject,
-                                        'courses': courses})
 
 
 class CourseDetailView(DetailView):

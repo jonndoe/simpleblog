@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {% if subject %}
+        {{ subject.title }} posts
+    {% else %}
+        All Posts
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <h1>
+        {% if subject %}
+            {{ subject.title }} posts
+        {% else %}
+            All posts
+        {% endif %}
+    </h1>
+    <div class="contents">
+        <h3>Subjects</h3>
+        <ul id="modules">
+            <li {% if not subject %} class="selected" {%endif%} ><a href="{% url 'post_list' %}">All</a></li>
+            {% for s in subjects %}
+                <li {% if subject == s %}class="selected"{% endif %}>
+                    <a href="{% url 'post_list_subject' s.slug %}"> {{ s.title }}<br><span>{{ s.total_posts }} posts</span></a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="module">
+        {% for post in posts %}
+            {% with subject=post.subject %}
+                <h3><a href="{% url 'post_detail' post.slug %}"> {{ post.title }}</a></h3>
+                <p>
+                    <a href="{% url 'post_list_subject' subject.slug %}"> slug{{ post.subject.slug }}, {{ subject }}</a>. {{ post.total_contents }} contents.
+                </p>
+            {% endwith %}
+        {% endfor %}
+    </div>
+        <p>
+            <a href="{% url 'post_create' %}" class="button w3-button w3-green">Create new post</a>
+        </p>
+{% endblock %}

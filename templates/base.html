@@ -33,6 +33,8 @@ a{text-decoration: none;}
    <a href="{% url 'images:list' %}"  class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white {% if section == 'images' %} w3-theme-d4 {% endif %}">Images</a>
    <a href="{% url 'user_list' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white {% if section == 'people' %} w3-theme-d4 {% endif %}">People</a>
    <a href="{% url 'blog:post_list'%}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white {% if section == 'posts' %} w3-theme-d4 {% endif %}">Posts</a>
+   <a href="{% url 'post_list'%}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white {% if section == 'posts' %} w3-theme-d4 {% endif %}">Posts New</a>
+
 
    <div class="w3-dropdown-hover w3-hide-small {% if section == 'dashboard' %} w3-theme-d4 {% endif %}">
     <button class="w3-button w3-padding-large w3-text-blue" title="Notifications">Hello,{{ user.username }}!</button>
