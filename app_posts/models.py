@@ -40,7 +40,7 @@ class Post(models.Model):
     postavatar = ProcessedImageField(upload_to="postavatars/%Y/%m/%d/",
                                blank=True,
                                processors=[
-                                   ResizeToFit(1600, 1300,
+                                   ResizeToFit(1600, 500,
                                                #upscale=False
                                                ),
                                    Watermark(),

@@ -7,21 +7,48 @@
 {% endblock %}
 
 
+<!-- hero images style -->
+{% block style %}
+<style>
+body,h1,h5 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    //background-image: url('{% static 'img/no_image.png' %}');
+    background-image: url('{% if post.postavatar %}{{ post.postavatar.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+</style>
+{% endblock style %}
+
+
+
+
 {% block content %}
-
-
-
-
-
-
-
 <!-- Page content -->
 <div class="w3-content" style="max-width:2000px;margin-top:1px">
 
-  <!-- Automatic Slideshow Images -->
-  <div class="w3-display-container w3-center">
-    <img src="{% static 'images/2.jpg' %}" style="width:100%;max-height:500px">
-  </div>
+
+
+
+
+<!-- problem with background hero image, if we remove <br> from div then it dissaperas completely.....to be fixed -->
+    <div class="bgimg w3-display-container w3-text-white">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+   </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- The Post body Section -->
   <div class="w3-container w3-content" style="max-width:1000px" id="band">

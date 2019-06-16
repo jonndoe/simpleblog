@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="{% static 'css/w3.css' %}">
@@ -16,10 +17,13 @@ input{padding:8px;display:block;border:none;border-bottom:1px solid #ccc;width:1
 a{text-decoration: none;}
 </style>
 
+<!-- hero images style -->
+{% block style %}
+{% endblock style %}
 
-<head>
+
+
   <title>{% block title %}title to be here{% endblock %}</title>
-
 </head>
 
 <body class="w3-theme-l5">

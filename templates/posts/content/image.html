@@ -1,11 +1,11 @@
-
+{% load static %}
 
 
 <div class="w3-third w3-center">
     <p>{{ item.title }}</p>
     <!-- this div here is only to pass a url to full image to onClick() function ...it should be fixed -->
-    <div id="{% if item.file %}{{ item.file.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" onclick="onClick(this)">
-    <img src="{% if item.file %}{{ item.thumbnail.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}"
+    <div id="{{ item.file.url }}" onclick="onClick(this)">
+    <img src="{{ item.thumbnail.url }}"
          class="w3-card w3-margin-bottom w3-hover-opacity w3-image"
          alt="Random Name"
          style="width:95%;cursor:pointer">
@@ -14,7 +14,4 @@
 
 </div>
 
-
-<img src="{% if item.file %}{{ item.file.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
-<img src="{% if item.file %}{{ item.thumbnail.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
 
