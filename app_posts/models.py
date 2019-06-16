@@ -11,8 +11,7 @@ from django.utils.safestring import mark_safe
 
 from imagekit import ImageSpec
 from imagekit.models import ImageSpecField, ProcessedImageField
-from imagekit.processors import ResizeToFit
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, Adjust, ResizeToFit
 from app_posts.processors import Watermark
 
 
@@ -95,7 +94,18 @@ class File(ItemBase):
 
 
 class Image(ItemBase):
-    file = models.FileField(upload_to='images')
+    #file = models.FileField(upload_to='images')
+    file = ProcessedImageField(upload_to="images",
+                                 #blank=True,
+                                 processors=[
+                                     ResizeToFit(1300,1300, upscale=False),
+                                     Watermark(),
+                                 ],
+                                 format='JPEG',
+                                 options={'quality': 60})
+
+    thumbnail = ImageSpecField([Adjust(contrast=1.2, sharpness=1.1), ResizeToFill(300, 200)], source='file',
+            format='JPEG', options={'quality': 100})
 
 
 class Video(ItemBase):
