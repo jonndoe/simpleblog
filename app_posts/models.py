@@ -9,6 +9,12 @@ from .fields import OrderField
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
+from imagekit import ImageSpec
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFit
+from imagekit.processors import ResizeToFill
+from app_posts.processors import Watermark
+
 
 class Subject(models.Model):
     title = models.CharField(max_length=200)
