@@ -37,6 +37,16 @@ class Post(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
 
     created = models.DateTimeField(auto_now_add=True)
+    postavatar = ProcessedImageField(upload_to="postavatars/%Y/%m/%d/",
+                               blank=True,
+                               processors=[
+                                   ResizeToFit(1600, 1300,
+                                               #upscale=False
+                                               ),
+                                   Watermark(),
+                               ],
+                               format='JPEG',
+                               options={'quality': 60})
 
 
     class Meta:
