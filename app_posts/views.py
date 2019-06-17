@@ -9,11 +9,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic.base import TemplateResponseMixin, View
-#from .forms import ModuleFormSet
+from .forms import MyCommentForm
 
 from django.forms.models import modelform_factory
 from django.apps import apps
-from .models import Post, Content
+from .models import Post, Content, MyComment
 
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 
@@ -192,20 +192,36 @@ class PostListView(TemplateResponseMixin, View):
                                         'posts': posts})
 
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'posts/post/detail.html'
+#class PostDetailView(DetailView):
+   # model = Post
+   # template_name = 'posts/post/detail.html'
 
 
-def post_detail_absolut(request, year, month, day, slug):
-    post = get_object_or_404(Post, slug=slug,
-                             status='published',
-                             publish__year=year,
-                             publish__month=month,
-                             publish__day=day)
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+
+    # list of active comments for the post
+    comments = post.mycomments.filter(active=True)
+
+    new_comment = None
+
+    if request.method == 'POST':
+        # a comment was posted
+        comment_form = MyCommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.owner = request.user
+            new_comment.save()
+    else:
+        comment_form = MyCommentForm()
+
     return render(request,
                   'posts/post/detail.html',
-                  {'post': post})
+                  {'post': post,
+                   'comments': comments,
+                   'new_comment': new_comment,
+                   'comment_form': comment_form})
 
 
 

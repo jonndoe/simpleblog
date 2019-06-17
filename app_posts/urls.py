@@ -24,5 +24,6 @@ urlpatterns = [
 
     path('content/order/', views.ContentOrderView.as_view(), name='content_order'),
 
-    path('<slug:slug>/', views.PostDetailView.as_view(), name='post_detail'),
+    #path('<slug:slug>/', views.PostDetailView.as_view(), name='post_detail'),
+    path('<slug:slug>/', views.post_detail, name='post_detail'),
 ]
