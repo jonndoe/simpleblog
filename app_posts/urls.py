@@ -2,8 +2,11 @@ from django.urls import path
 from . import views
 
 
+#app_name = 'app_posts'
+
 urlpatterns = [
     path('', views.PostListView.as_view(), name='post_list'),
+    path('subject/<slug:subject>/', views.PostListView.as_view(), name='post_list_subject'),
 
     path('mine/',views.ManagePostListView.as_view(),name='manage_post_list'),
     path('create/',views.PostCreateView.as_view(),name='post_create'),
@@ -21,6 +24,5 @@ urlpatterns = [
 
     path('content/order/', views.ContentOrderView.as_view(), name='content_order'),
 
-    path('subject/<slug:subject>/', views.PostListView.as_view(), name='post_list_subject'),
     path('<slug:slug>/', views.PostDetailView.as_view(), name='post_detail'),
 ]

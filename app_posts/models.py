@@ -8,11 +8,14 @@ from .fields import OrderField
 
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from django.utils import timezone
 
 from imagekit import ImageSpec
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, Adjust, ResizeToFit
 from app_posts.processors import Watermark
+
+from django.urls import reverse
 
 
 class Subject(models.Model):
@@ -26,7 +29,19 @@ class Subject(models.Model):
         return self.title
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super(PublishedManager,
+                     self).get_queryset()\
+                          .filter(status='published')
+
+
+
 class Post(models.Model):
+    STATUS_CHOICES = (
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    )
     owner = models.ForeignKey(get_user_model(),
                               related_name='posts_created',
                               on_delete=models.CASCADE)
@@ -34,9 +49,12 @@ class Post(models.Model):
                                 related_name='posts',
                                 on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
-
+    slug = models.SlugField(max_length=200, unique_for_date='publish')
+    publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10,
+                              choices=STATUS_CHOICES,
+                              default='draft')
     postavatar = ProcessedImageField(upload_to="postavatars/%Y/%m/%d/",
                                blank=True,
                                processors=[
@@ -48,12 +66,22 @@ class Post(models.Model):
                                format='JPEG',
                                options={'quality': 60})
 
+    objects = models.Manager() # the default manager
+    published = PublishedManager() # Custom manager
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
         return  self.title
+
+    #def get_absolute_url(self):
+       # return reverse('post_detail_absolute',
+       #                args=[self.publish.year,
+        #                     self.publish.month,
+        #                     self.publish.day,
+       #                      self.slug])
+
 
 
 

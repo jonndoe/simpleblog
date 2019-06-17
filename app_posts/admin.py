@@ -11,7 +11,10 @@ class SubjectAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'subject', 'created']
-    list_filter = ['created', 'subject']
+    list_display = ['title', 'subject', 'created', 'publish', 'status']
+    list_filter = ['status', 'created', 'subject', 'owner', 'publish']
     search_fields = ['title',]
     prepopulated_fields = {'slug': ('title',)}
+    raw_id_fields = ('owner',)
+    date_hierarchy = 'publish'
+    ordering = ('status', 'publish')

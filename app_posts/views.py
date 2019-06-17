@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic.base import TemplateResponseMixin, View
 #from .forms import ModuleFormSet
 
@@ -167,7 +167,7 @@ class PostListView(TemplateResponseMixin, View):
     def get(self, request, subject=None):
         subjects = Subject.objects.annotate(
             total_posts=Count('posts'))
-        posts = Post.objects.annotate(
+        posts = Post.published.annotate(
             total_contents=Count('contents'))
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
@@ -183,6 +183,15 @@ class PostDetailView(DetailView):
     template_name = 'posts/post/detail.html'
 
 
+def post_detail_absolut(request, year, month, day, slug):
+    post = get_object_or_404(Post, slug=slug,
+                             status='published',
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day)
+    return render(request,
+                  'posts/post/detail.html',
+                  {'post': post})
 
 
 
