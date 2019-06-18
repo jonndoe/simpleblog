@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load blog_tags %}
+
 {% block title %}
     {% if subject %}
         {{ subject.title }} posts
@@ -9,6 +11,20 @@
         All Posts
     {% endif %}
 {% endblock %}
+
+
+<!-- hero images style -->
+{% block style %}
+<style>
+.bgimgpostlist {
+    //This url is left here as working example
+    //background-image: url('{% if post.postavatar %}{{ post.postavatar.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+</style>
+{% endblock style %}
 
 
 {% block content %}
@@ -21,23 +37,18 @@ and is wrapped around the whole page content, except for the footer in this exam
 <!-- Header -->
 <header class="w3-container w3-center w3-padding-32">
     <div class="contents">
-        <p>
-            <a href="{% url 'post_create' %}" class="button w3-button w3-green w3-right">Create new post</a>
-        </p>
         <h1><b>ПОСЛЕДНИЕ ПОСТЫ</b></h1>
-        <h3>Subjects</h3>
-        <ul>
-            <li {% if not subject %} class="selected" {%endif%} ><a href="{% url 'post_list' %}"></a></li>
-            {% for s in subjects %}
-                <li {% if subject == s %}class="selected"{% endif %}>
-                    <a href="{% url 'post_list_subject' s.slug %}"> {{ s.title }}<br><span>{{ s.total_posts }} posts</span></a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-  <p>Currently <a href="{% url 'post_list'%}"><span class="w3-tag"> 45 Posts</span></a> on Site</p>
-</header>
+        <p>Total <a href="{% url 'post_list'%}"><span class="w3-tag w3-theme"> {% total_posts %}  Posts</span></a> on Site. <a href="{% url 'post_create' %}" class="w3-button w3-text-green">Create new post !</a></p>
+          <!-- Navbar (placed at the bottom of the header image) -->
+        <div class="w3-bar w3-light-grey w3-display" style="bottom:-16px">
 
+                  <a class="w3-bar-item w3-button w3-padding-large {% if not subject %} w3-theme-l3 {%endif%} w3-white" href="{% url 'post_list' %}">All Posts</a>
+                  {% for s in subjects %}
+                          <a class="w3-bar-item w3-button w3-padding-large {% if subject == s %}w3-theme-l3{% endif %} w3-white" href="{% url 'post_list_subject' s.slug %}"> {{ s.title }}<span>{{ s.total_posts }} posts</span></a>
+                  {% endfor %}
+        </div>
+    </div>
+</header>
 
 <!-- Grid -->
 <div class="w3-row">
@@ -45,9 +56,7 @@ and is wrapped around the whole page content, except for the footer in this exam
 <!-- Blog entries -->
 <div class="w3-col l8 s12">
 
-
-
-  Blog entry
+  <!-- Blog entry -->
   {% if tag %}
   <div class="w3-container">
     <h2>{{ tagged_posts }} Posts tagged with <span class="w3-tag">{{ tag.name }}</span></h2>
@@ -56,12 +65,14 @@ and is wrapped around the whole page content, except for the footer in this exam
 
   {% for post in posts %}
   <div class="w3-card-4 w3-margin w3-white">
-    <img src="{% if post.postavatar %}{{ post.postavatar.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="Nature" style="width:100%">
+
+    <div class="bgimgpostlist w3-display-container w3-text-white" style="background-image: url('{% if post.postavatar %}{{ post.postavatar.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}');">
+     <br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+
     <div class="w3-container">
       <h3><b>{{ post.title }}</b></h3>
        <p>
-
-
          {% if post.tags.all %}
       Tags:
          {% endif %}
@@ -70,10 +81,8 @@ and is wrapped around the whole page content, except for the footer in this exam
         <span class="w3-tag">{{ tag.name }}</span>
       </a>
       {% endfor %}
-
-
        </p>
-      <h5><span class="w3-opacity">Created {{ post.created }} by {{ post.owner }}</span></h5>
+      <h5><span class="w3-opacity">Published {{ post.publish }} by {{ post.owner }}</span></h5>
     </div>
 
     <div class="w3-container">
@@ -85,7 +94,7 @@ and is wrapped around the whole page content, except for the footer in this exam
           </a>
         </div>
         <div class="w3-col m4 w3-hide-small">
-          <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag">0</span></span></p>
+          <p><span class="w3-padding-large w3-right"><b>Comments  </b> <span class="w3-tag w3-theme">{{ post.mycomments.count }}</span></span></p>
         </div>
       </div>
     </div>
@@ -112,13 +121,12 @@ and is wrapped around the whole page content, except for the footer in this exam
   </div><hr>
 
   <!-- Latest Posts-->
-
+  {% show_latest_posts 3 %}
   <hr>
 
-
   <!-- Most commented posts -->
-
-    <div class="w3-card w3-margin">
+  {% get_most_commented_posts as most_commented_posts %}
+  <div class="w3-card w3-margin">
     <div class="w3-container w3-padding">
       <h4>Most commented Posts</h4>
     </div>
@@ -126,18 +134,14 @@ and is wrapped around the whole page content, except for the footer in this exam
         {% for post in posts %}
       <a href="{% url 'post_detail' post.slug %}">
       <li class="w3-padding-16">
-        <img src="{% static 'images/1.jpg' %}" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <img src="{{ post.postavatar.url }}" alt="Image" class="w3-left w3-margin-right" style="max-height:30px;width:50px">
         <span class="w3-large">{{ post.owner }} </span><br>
-        <span>{{ post.title }}  <i class="fa fa-comment"></i>    5</span>
+        <span>{{ post.title }}  <i class="fa fa-comment"></i>{{ post.mycomments.count }}</span>
       </li>
       </a>
       {% endfor %}
     </ul>
   </div>
-
-
-
-
 
   <!-- Labels / tags -->
   <div class="w3-card w3-margin">
@@ -146,26 +150,11 @@ and is wrapped around the whole page content, except for the footer in this exam
     </div>
     <div class="w3-container w3-white">
     <p>
-
       {% for tag in tags.all %}
       <a href="{% url 'post_list_by_tag' tag.slug %}">
       <span class="w3-tag w3-black w3-small w3-margin-bottom"> {{ tag.name }} </span>
       </a>
       {% endfor %}
-
-      <a href="">
-      <span class="w3-tag w3-black w3-small w3-margin-bottom"> GAS </span>
-      </a>
-      <a href="">
-      <span class="w3-tag w3-black w3-small w3-margin-bottom"> GAS </span>
-      </a>
-      <a href="">
-      <span class="w3-tag w3-black w3-small w3-margin-bottom"> GAS </span>
-      </a>
-      <a href="">
-      <span class="w3-tag w3-black w3-small w3-margin-bottom"> GAS </span>
-      </a>
-
     </p>
     </div>
   </div>
