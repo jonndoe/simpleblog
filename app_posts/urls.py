@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.PostListView.as_view(), name='post_list'),
+    path('tag/<slug:tag_slug>/', views.PostListView.as_view(), name='post_list_by_tag'),
     path('subject/<slug:subject>/', views.PostListView.as_view(), name='post_list_subject'),
 
     path('mine/',views.ManagePostListView.as_view(),name='manage_post_list'),

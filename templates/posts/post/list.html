@@ -47,12 +47,12 @@ and is wrapped around the whole page content, except for the footer in this exam
 
 
 
-  <!-- Blog entry
+  Blog entry
   {% if tag %}
   <div class="w3-container">
     <h2>{{ tagged_posts }} Posts tagged with <span class="w3-tag">{{ tag.name }}</span></h2>
   </div>
-  {% endif %} -->
+  {% endif %}
 
   {% for post in posts %}
   <div class="w3-card-4 w3-margin w3-white">
@@ -62,14 +62,14 @@ and is wrapped around the whole page content, except for the footer in this exam
        <p>
 
 
-         <!-- {% if post.tags.all %}
+         {% if post.tags.all %}
       Tags:
          {% endif %}
       {% for tag in post.tags.all %}
-      <a href="{% url 'blog:post_list_by_tag' tag.slug %}">
+      <a href="{% url 'post_list_by_tag' tag.slug %}">
         <span class="w3-tag">{{ tag.name }}</span>
       </a>
-      {% endfor %} -->
+      {% endfor %}
 
 
        </p>
@@ -146,13 +146,13 @@ and is wrapped around the whole page content, except for the footer in this exam
     </div>
     <div class="w3-container w3-white">
     <p>
-      <!--
+
       {% for tag in tags.all %}
-      <a href="{% url 'blog:post_list_by_tag' tag.slug %}">
+      <a href="{% url 'post_list_by_tag' tag.slug %}">
       <span class="w3-tag w3-black w3-small w3-margin-bottom"> {{ tag.name }} </span>
       </a>
       {% endfor %}
-      -->
+
       <a href="">
       <span class="w3-tag w3-black w3-small w3-margin-bottom"> GAS </span>
       </a>

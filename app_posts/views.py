@@ -22,6 +22,8 @@ from .models import Subject
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from taggit.models import Tag
+
 
 
 class OwnerMixin(object):
@@ -165,7 +167,7 @@ class PostListView(TemplateResponseMixin, View):
     model = Post
     template_name = 'posts/post/list.html'
 
-    def get(self, request, subject=None):
+    def get(self, request, subject=None, tag_slug=None):
         subjects = Subject.objects.annotate(
             total_posts=Count('posts'))
         posts = Post.published.annotate(
@@ -173,10 +175,19 @@ class PostListView(TemplateResponseMixin, View):
         if subject:
             subject = get_object_or_404(Subject, slug=subject)
             posts = posts.filter(subject=subject)
+        tag = None
+        if tag_slug:
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            posts = posts.filter(tags__in=[tag])
+            print(posts)
+            tagged_posts = len(posts)
+        else:
+            tagged_posts = None
 
         #pagination
         paginator = Paginator(posts, 3) # 3 posts in each page
         page = request.GET.get('page')
+        tags = Tag.objects.all()
         try:
             posts = paginator.page(page)
         except PageNotAnInteger:
@@ -189,7 +200,12 @@ class PostListView(TemplateResponseMixin, View):
         return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
                                         'page': page,
-                                        'posts': posts})
+                                        'posts': posts,
+                                        'tagged_posts': tagged_posts,
+                                        'tag': tag,
+                                        'tags': tags,
+                                        'section': 'posts'})
+
 
 
 #class PostDetailView(DetailView):

@@ -70,7 +70,7 @@ class Post(models.Model):
 
     objects = models.Manager() # the default manager
     published = PublishedManager() # Custom manager
-    #tags = TaggableManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-created']

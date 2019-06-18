@@ -29,7 +29,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('app_users.urls')),
     path('users/', include('django.contrib.auth.urls')),
-    path('blog/', include('app_blog.urls', namespace='blog')),
     #this is home page common for all apps.....
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('images/', include('app_images.urls', namespace='images')),
