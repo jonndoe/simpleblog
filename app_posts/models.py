@@ -17,6 +17,8 @@ from app_posts.processors import Watermark
 
 from django.urls import reverse
 
+from taggit.managers import TaggableManager
+
 
 class Subject(models.Model):
     title = models.CharField(max_length=200)
@@ -68,6 +70,7 @@ class Post(models.Model):
 
     objects = models.Manager() # the default manager
     published = PublishedManager() # Custom manager
+    #tags = TaggableManager()
 
     class Meta:
         ordering = ['-created']
