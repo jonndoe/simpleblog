@@ -19,6 +19,9 @@ body, html {height: 100%}
     background-position: center;
     background-size: cover;
 }
+.comment:nth-child(even) {
+    background:red;
+    }
 </style>
 {% endblock style %}
 
@@ -40,23 +43,23 @@ body, html {height: 100%}
 
 
 
-
-
-
-
-
-
-
-
-
-
   <!-- The Post body Section -->
   <div class="w3-container w3-content" style="max-width:1000px" id="band">
-
     <div class="w3-card w3-margin-top">
+
     <div class="w3-container w3-margin">
     <h6>posts/post/detail.html</h6>
-    <h2 class="">{{ post.title }}</h2>
+    <h2>{{ post.title }}</h2>
+      <p>
+         {% if post.tags.all %}
+      Tags:
+         {% endif %}
+      {% for tag in post.tags.all %}
+      <a href="{% url 'post_list_by_tag' tag.slug %}">
+        <span class="w3-tag">{{ tag.name }}</span>
+      </a>
+      {% endfor %}
+       </p>
         {% with subject=post.subject %}
         <div>
             <p>
@@ -64,7 +67,7 @@ body, html {height: 100%}
             </p>
         </div>
     {% endwith %}
-    <p class="w3-opacity"><i>Created {{ post.created }} by {{ post.owner }}</i></p>
+    <h5><span class="w3-opacity">Published {{ post.publish }} by {{ post.owner }}</span></h5>
     </div>
 
 
@@ -113,13 +116,13 @@ body, html {height: 100%}
     </div>
     </div>
 
-    <div class="w3-container">
+
     <div class="w3-card">
-    <p class="w3-left"><button class="w3-button w3-theme w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>
-    <p class="w3-left"><button class="w3-button w3-theme w3-border" onclick="hideBlogCommentsFunctionByStyle('demo12')" id="myBtn"><b><i class="fa fa-comment"></i></b> Comment</button></p>
-    <a href=""><p class="w3-left"><button class="w3-button w3-theme w3-border"><b><i class="fa fa-share"></i></b> Share this post</button></p></a>
+    <p class="w3-left"><button class="w3-button w3-padding-large w3-white w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>
+    <p class="w3-left"><button class="w3-button w3-padding-large w3-white w3-border" onclick="hideBlogCommentsFunctionByStyle('demo12')" id="myBtn"><b><i class="fa fa-comment"></i> Comment</b></button></p>
+    <a href=""><p class="w3-left"><button class="w3-button w3-padding-large w3-white w3-border"><b><i class="fa fa-share"></i> Share this post</b></button></p></a>
     </div>
-    </div>
+
     <hr>
 
 
@@ -142,6 +145,33 @@ body, html {height: 100%}
          </div>
   <hr>
     <p class="w3-clear"></p>
+
+
+            <!-- Similar Posts -->
+    <div class="w3-card w3-margin-top">
+      <div class="w3-container w3-padding">
+        <h4>Similar posts</h4>
+      </div>
+
+
+      <ul class="w3-ul w3-hoverable w3-white">
+          {% for post in similar_posts %}
+          <a href="{% url 'post_detail' post.slug %}">
+        <li class=" w3-hide-medium w3-hide-small">
+          <img src="{% if post.postavatar %}{{ post.postavatar.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="Image" class="w3-left w3-margin-right" style="height:30px;width:50px">
+          <span class="w3-large">{{ post.title }}</span><br>
+          <span>{{ post.title|truncatewords:10|linebreaks }}</span>
+        </li>
+          </a>
+          {% endfor %}
+      </ul>
+    </div>
+    <hr>
+
+    <p class="w3-clear"></p>
+
+
+
     <!-- Example of comment field -->
           <div class="w3-container">
             {% with comments.count as total_comments %}

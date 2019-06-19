@@ -9,7 +9,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from django.shortcuts import redirect, get_object_or_404, render
 from django.views.generic.base import TemplateResponseMixin, View
-from .forms import MyCommentForm
+from .forms import MyCommentForm, SearchForm
+
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
+
 
 from django.forms.models import modelform_factory
 from django.apps import apps
@@ -232,13 +235,40 @@ def post_detail(request, slug):
     else:
         comment_form = MyCommentForm()
 
+    # List of similar posts
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids) \
+                                  .exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')) \
+                                 .order_by('-same_tags','-publish')[:4]
+
     return render(request,
                   'posts/post/detail.html',
                   {'post': post,
                    'comments': comments,
                    'new_comment': new_comment,
-                   'comment_form': comment_form})
+                   'comment_form': comment_form,
+                   'similar_posts': similar_posts})
 
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            search_vector = SearchVector('title', weight='A')+ SearchVector('body', weight='B')
+            search_query = SearchQuery(query)
+            results = Post.objects.annotate(
+                similarity=TrigramSimilarity('title', query),
+            ).filter(similarity__gt=0.3).order_by('-similarity')
+    return render(request,
+                  'posts/post/search.html',
+                  {'form': form,
+                   'query': query,
+                   'results': results})
 
 
 

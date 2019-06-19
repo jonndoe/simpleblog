@@ -14,6 +14,8 @@ urlpatterns = [
     path('<pk>/edit/',views.PostUpdateView.as_view(),name='post_edit'),
     path('<pk>/delete/',views.PostDeleteView.as_view(),name='post_delete'),
 
+    path('search/', views.post_search, name='post_search'),
+
 
     path('post/<int:post_id>/content/<model_name>/create/',views.ContentCreateUpdateView.as_view(),
          name='post_content_create'),

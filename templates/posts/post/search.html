@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    {% if query %}
+
+
+          <!-- Posts with query-->
+          <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding">
+              <h4>Posts containing "{{ query }}"</h4>
+              <h3>
+        {% with results.count as total_results %}
+            Found {{ total_results }} result{{ total_results|pluralize }}
+        {% endwith %}
+              </h3>
+            </div>
+
+            <ul class="w3-ul w3-hoverable w3-white">
+              {% for post in results %}
+              <a href="{% url 'post_detail' post.slug %}">
+              <li class="w3-padding-16">
+                <img src="{% static 'images/1.jpg' %}" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+                <span class="w3-large">{{ post.title }}</span><br>
+                <span>{{ post.title }}</span>
+              </li>
+              </a>
+              {% endfor %}
+            </ul>
+          </div>
+          <hr>
+        <div class="w3-container w3-center">
+            <p><a href="{% url 'post_search' %}"><button class="w3-button w3-blue" >Search again</button></a></p>
+        </div>
+    {% else %}
+    <div class="w3-container w3-center">
+        <h1>Search for posts</h1>
+        <div class="w3-container">
+        <form class="w3-container w3-card-4 w3-center w3-input" action="." method="get">
+        {{ form.as_p }}
+        <div class="w3-container">
+        <button class="w3-button w3-blue w3-margin-bottom" type="submit">Search</button>
+        </div>
+        </form>
+        </div>
+        <br><br><br><br><br>
+    </div><br><br><br><br><br><br><br><br><br><br>
+    {% endif %}
+{% endblock content%}

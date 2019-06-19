@@ -15,7 +15,6 @@ class MyCommentForm(forms.ModelForm):
         model = MyComment
         fields = ('name', 'email', 'body')
 
-'''
+
 class SearchForm(forms.Form):
     query = forms.CharField()
-'''
