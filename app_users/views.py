@@ -22,6 +22,8 @@ from .models import Contact
 from app_actions.utils import create_action
 from app_actions.models import Action
 
+from app_posts.models import Post
+
 
 '''
 class SignUpView(CreateView):
@@ -130,6 +132,22 @@ def user_detail(request, username):
                   'registration/user/detail.html',
                   {'section': 'people',
                    'user': user})
+
+
+@login_required
+def posts_of_user(request, id):
+    user = get_object_or_404(CustomUser,
+                             id=id,
+                             is_active=True)
+
+    user_posts = Post.objects.filter(owner=user.id)
+    #assert False
+    return  render(request,
+                   'registration/user/detail.html',
+                   {'section': 'people',
+                    'user': user,
+                    'user_posts': user_posts})
+
 
 
 @ajax_required

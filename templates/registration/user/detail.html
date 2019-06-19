@@ -64,7 +64,7 @@ body, html {height: 100%}
         <div class="w3-white">
           <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i>POSTS</button>
           <div id="Demo2" class="w3-hide w3-container">
-            <p class="w3-hover-text-blue"><a href="">Posts</a></p>
+            <p class="w3-hover-text-blue"><a href="{% url 'posts_of_user' user.id %}">Posts</a></p>
           </div>
           <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>IMAGES</button>
           <div id="Demo3" class="w3-hide w3-container">
@@ -133,6 +133,9 @@ body, html {height: 100%}
           </div>
         </div>
       </div>
+
+
+        {% if user_posts %} {{ user_posts }}  {% endif %}
 
       <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         <img src="../w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
