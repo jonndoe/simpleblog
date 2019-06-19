@@ -4,7 +4,7 @@
         {% if page.has_previous %}
         <a href="?page={{ page.previous_page_number }}" class="w3-bar-item w3-button w3-hover-theme">«</a>
         {% endif %}
-        <span class="w3-bar-item w3-theme">
+        <span class="w3-bar-item w3-theme-l1">
         Page {{ page.number }} of {{ page.paginator.num_pages }}.
         </span>
         {% if page.has_next %}
@@ -12,3 +12,5 @@
         {% endif %}
     </div>
 </div>
+
+

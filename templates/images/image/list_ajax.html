@@ -1,18 +1,29 @@
 {% load thumbnail %}
 
+
+
+
+
+{% load thumbnail %}
+
+<div class="w3-row-padding w3-margin-top w3-theme-l5">
 {% for image in images %}
-    <div class="image">
-        <a href="{{ image.get_absolute_url }}">
-            {% thumbnail image.image "300x300" crop="100%" as im %}
-                <a href="{{ image.get_absolute_url }}">
-                <img src="{{ im.url }}">
-                </a>
-            {% endthumbnail %}
-        </a>
-        <div class="info">
-            <a href="{{ image.get_absolute_url }}" class="title">
-                {{ image.title }}, {{ image.total_likes }} likes
-            </a>
-        </div>
-    </div>
+<div class="w3-third">
+  <div class="w3-card">
+      <a href="{{ image.get_absolute_url }}">
+
+          {% thumbnail image.image "500x300" crop="100%" as im %}
+
+                <img src="{{ im.url }}" style="width:100%">
+
+          {% endthumbnail %}
+      </a>
+      <div class="w3-container">
+          <h4>{{ image.title }} <span class="w3-right">likes</span><span class="w3-tag w3-theme-l1 w3-right" >{{ image.total_likes }} </span > </h4>
+      </div>
+  </div>
+ <br>
+</div>
+
 {% endfor %}
+</div>

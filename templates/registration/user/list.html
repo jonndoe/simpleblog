@@ -5,21 +5,25 @@
 {% block title %}People{% endblock %}
 
 {% block content %}
-    <h1>People</h1>
-    <div id="people-list">
-        {% for user in users %}
-            <div class="user">
-                <a href="{{ user.get_absolute_url }}">
-                {% thumbnail user.profile.photo "180x180" crop="100%" as im %}
-                    <img src="{{ im.url }}">
+
+<!-- Team Container -->
+<div class="w3-container w3-padding-64 w3-center" id="team">
+<h2>PEOPLE</h2>
+<p>Sort by: Position</p>
+<div class="w3-row"><br>
+{% for user in users %}
+        <div class="w3-quarter">
+          <a href="{{ user.get_absolute_url }}">
+                                {% thumbnail user.profile.photo "180x180" crop="100%" as im %}
+                    <img src="{{ im.url }}" style="width:45%" class="w3-circle w3-hover-opacity">
                 {% endthumbnail %}
-                </a>
-                <div class="info">
-                    <a href="{{ user.get_absolute_url }}" class="title">
-                        {{ user.username }}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+          <h3>{{ user.username }}</h3>
+          <p>Seamen</p>
+          </a>
+        </div>
+{% endfor %}
+</div>
+</div>
+
+
 {% endblock %}

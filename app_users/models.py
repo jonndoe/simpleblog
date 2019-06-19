@@ -44,3 +44,4 @@ class CustomUser(AbstractUser):
 
     def get_absolute_url(self):
         return reverse_lazy('user_detail', args=[self.username])
+

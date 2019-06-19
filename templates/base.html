@@ -15,6 +15,44 @@
 html,body,h1,h2,h3,h4,h5 {font-family: "Lato", sans-serif}
 input{padding:8px;display:block;border:none;border-bottom:1px solid #ccc;width:100%}
 a{text-decoration: none;}
+
+/* messages */
+ul.messages {
+    margin:10px 100px;
+    padding:0;
+    list-style-type:
+    none;
+}
+ul.messages li.success,
+ul.messages li.warning,
+ul.messages li.error,
+ul.messages li.info {
+    margin:0;
+    padding:14px 20px;
+    list-style:none;
+    color:#fff;
+}
+
+ul.messages li.success { background:#81ce81; }
+ul.messages li.success a { color:#0ac33e; }
+
+ul.messages li.error { background:#a30029; color:#e9828e; }
+ul.messages li.error a { color:#e9828e; }
+
+ul.messages li.info { background:#faffae; color:#696b4e; }
+ul.messages li.info a { color:#1586de; }
+
+ul.messages li.warning { background:#de9404; }
+ul.messages li.warning a { color:#f49000; }
+
+ul.messages li a.close {
+    margin:0;
+    float:right;
+    opacity:1;
+    border:0;
+    box-shadow:none;
+    text-shadow:none;
+}
 </style>
 
 <!-- hero images style -->
@@ -93,18 +131,19 @@ a{text-decoration: none;}
 <!-- Alert Box -->
 {% if messages %}
       <br><br>
-      <div class="w3-container w3-center w3-display-container w3-round w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-d4 w3-display-topright">
+      <ul class="messages w3-container w3-center w3-display-container w3-round w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-d4 w3-right">
           <i class="fa fa-remove"></i>
         </span>
-          <div class="w3-container">
-         {% for message in messages %}
-        <h2><strong>{{ message|safe }}</strong></h2>
-         {% endfor %}
-          </div>
-      </div>
-{% endif %}
 
+         {% for message in messages %}
+              <li class="{{ message.tags }}">
+                  <h2><strong>{{ message|safe }}</strong></h2>
+              </li>
+         {% endfor %}
+
+      </ul>
+{% endif %}
 
 
 <!-- Content will go here -->
