@@ -64,7 +64,11 @@ ul.messages li a.close {
   <title>{% block title %}title to be here{% endblock %}</title>
 </head>
 
+
+
+{% block bodystyle %}
 <body class="w3-theme-l5">
+{% endblock %}
 
 <!-- Navbar -->
 <div class="w3-top">
@@ -101,7 +105,7 @@ ul.messages li a.close {
 
 
 
-   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account"><img src="{% if user.profile.photo.url %} {{ user.profile.photo.url }} {% endif %}" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></a>
+   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account"><img src="{% if user.profile.photo %} {{ user.profile.photo.url }} {% endif %}" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></a>
   {% else %}
     <a href="{% url 'login' %}" class="w3-button w3-hide-small w3-bar-item w3-teal w3-right w3-padding-large">LogIn</a>
     <a href="{% url 'signup' %}" class="w3-button w3-hide-small w3-bar-item w3-teal w3-right w3-padding-large">SignUp</a>
@@ -110,6 +114,12 @@ ul.messages li a.close {
 
  </div>
 </div>
+
+
+
+{% if user.profile.photo %} {{ user.profile.photo.url }} {% endif %}
+
+
 
 <!-- Navbar on small screens -->
 <br><br>

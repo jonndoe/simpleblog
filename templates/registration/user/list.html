@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% load thumbnail %}
 
 {% block title %}People{% endblock %}
@@ -14,9 +16,13 @@
 {% for user in users %}
         <div class="w3-quarter">
           <a href="{{ user.get_absolute_url }}">
-                                {% thumbnail user.profile.photo "180x180" crop="100%" as im %}
+              {% if user.profile.photo %}
+                {% thumbnail user.profile.photo "180x180" crop="100%" as im %}
                     <img src="{{ im.url }}" style="width:45%" class="w3-circle w3-hover-opacity">
                 {% endthumbnail %}
+              {% else %}
+                    <img src="{% static 'img/no_image.png' %}" style="width:45%" class="w3-circle w3-hover-opacity">
+              {% endif %}
           <h3>{{ user.username }}</h3>
           <p>Seamen</p>
           </a>

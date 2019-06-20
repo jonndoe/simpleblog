@@ -2,9 +2,45 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% load static %}
+
+{% block bodystyle %}
+<body class="w3-theme-d1">
+{% endblock %}
+
+<!-- hero images style -->
+{% block style %}
+<style>
+body,h1,h5 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    //background-image: url('{% static 'img/no_image.png' %}');
+    background-image: url('{% if user.profile.photo %}{{ user.profile.photo.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+.tagmargin {margin-bottom:2px;}
+</style>
+{% endblock style %}
+
+
+
 {% block content %}
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:5px">
+
+
+
+  <!-- problem with background hero image, if we remove <br> from div then it dissaperas completely.....to be fixed -->
+    <div class="bgimg w3-display-container w3-text-white w3-margin-bottom w3-padding w3-hide-small">
+        <br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+  {% block currenpagetitle %}
+  {% endblock %}
+
+
   <!-- The Grid -->
   <div class="w3-row">
 
@@ -12,13 +48,12 @@
     <div class="w3-col m3">
       <!-- Profile -->
       <div class="w3-card w3-round w3-white">
-        <div class="w3-container">
-         <h4 class="w3-center">My Profile</h4>
-         <p class="w3-center"><img src="{{ user.profile.photo.url }}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+        <div class="w3-container w3-center">
+         <h2 class="w3-center">{{ user.username }}</h2>
+         <p class="w3-center"><img src="{% if user.profile.photo %} {{ user.profile.photo.url }} {% endif %}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
          <hr>
-         <p><i class="fa fa-user fa-fw w3-margin-right w3-text-theme"></i>{{ user.username }}</p>
-         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> London, UK</p>
-         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{{ user.profile.date_of_birth }}</p>
+         <p> London, UK</p>
+         <p>{{ user.profile.date_of_birth }}</p>
         </div>
       </div>
       <br>
@@ -26,17 +61,18 @@
       <!-- Accordion -->
       <div class="w3-card w3-round">
         <div class="w3-white">
-          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i>SETTINGS</button>
+          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align w3-center">SETTINGS</button>
           <div id="Demo1" class="w3-hide w3-container">
+            <p class="w3-hover-text-blue"><a href="{% url 'dashboard'%}">My dashboard</a></p>
             <p class="w3-hover-text-blue"><a href="{% url 'edit' %}">Edit your profile</a></p>
             <p class="w3-hover-text-blue"><a href="{% url 'password_change'%}">Change password</a></p>
             <p class="w3-hover-text-blue"><a href="{% url 'password_reset'%}">Reset password</a></p>
           </div>
-          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i>POSTS</button>
+          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align w3-center">POSTS</button>
           <div id="Demo2" class="w3-hide w3-container">
-            <p class="w3-hover-text-blue"><a href="{% url 'manage_post_list' %}">My posts</a></p>
+            <p class="w3-hover-text-blue"><a href="{% url 'manage_post_list' %}">See my posts</a></p>
           </div>
-          <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>IMAGES</button>
+          <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align w3-center">IMAGES</button>
           <div id="Demo3" class="w3-hide w3-container">
          <div class="w3-row-padding">
          <br>
@@ -84,21 +120,15 @@
         </div>
       </div>
       <br>
-
-      <!-- Alert Box -->
-      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
-      </div>
-
     <!-- End Left Column -->
     </div>
 
     <!-- Middle Column -->
     <div class="w3-col m7">
+
+      {% block manageposts %}
+      {% endblock manageposts %}
+
 
       <div class="w3-row-padding">
         <div class="w3-col m12">

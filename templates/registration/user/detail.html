@@ -51,7 +51,7 @@ body, html {height: 100%}
       <div class="w3-card w3-round w3-white">
         <div class="w3-container w3-center">
          <h2 class="w3-center">{{ user.username }}</h2>
-         <p class="w3-center"><img src="{{ user.profile.photo.url }}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+         <p class="w3-center"><img src="{% if user.profile.photo %} {{ user.profile.photo.url }} {% endif %}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
          <hr>
          <p> London, UK</p>
          <p>{{ user.profile.date_of_birth }}</p>

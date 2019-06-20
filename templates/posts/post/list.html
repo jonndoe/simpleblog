@@ -134,7 +134,7 @@ and is wrapped around the whole page content, except for the footer in this exam
         {% for post in posts %}
       <a href="{% url 'post_detail' post.slug %}">
       <li class="w3-padding-16">
-        <img src="{{ post.postavatar.url }}" alt="Image" class="w3-left w3-margin-right" style="max-height:30px;width:50px">
+        <img src="{% if post.postavatar %}{{ post.postavatar.url }}{% endif %}" alt="Image" class="w3-left w3-margin-right" style="max-height:30px;width:50px">
         <span class="w3-large">{{ post.owner }} </span><br>
         <span>{{ post.title }}  <i class="fa fa-comment"></i>{{ post.mycomments.count }}</span>
       </li>

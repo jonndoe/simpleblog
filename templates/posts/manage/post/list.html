@@ -1,12 +1,21 @@
-{% extends "base.html" %}
+{% extends "registration/dashboard.html" %}
 
 {% block title %}My Posts{% endblock %}
 
-{% block content %}
-<h1>My posts ( posts/manage/post/list.html )</h1>
+  {% block currenpagetitle %}
+  <div class="w3-container w3-center">
+    <h1>My posts ( posts/manage/post/list.html )</h1>
+  </div>
+  {% endblock %}
+
+{% block manageposts %}
+  <div class="w3-container w3-margin-bottom w3-margin-left w3-margin-rignt">
     <div class="module">
+        <p>
+            <a href="{% url 'post_create' %}" class="button w3-button w3-green">NEW POST!</a>
+        </p>
         {% for post in object_list %}
-            <div class="course-info w3-yellow">
+            <div class="course-info w3-theme-l1 w3-margin-bottom w3-padding">
             <h3>{{ post.title }}</h3>
             <p>
             <a href="{% url 'post_edit' post.id %}">Edit</a>
@@ -17,8 +26,6 @@
         {% empty %}
             <p>You haven't created any posts yet.</p>
         {% endfor %}
-        <p>
-            <a href="{% url 'post_create' %}" class="button w3-button w3-green">Create new post</a>
-        </p>
     </div>
+  </div>
 {% endblock %}

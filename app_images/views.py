@@ -103,7 +103,7 @@ def image_list(request):
     #images = Image.objects.all()
     images_by_popularity = Image.objects.annotate(
         likes=Count('users_like')).order_by('-likes')
-    paginator = Paginator(images_by_popularity, 8)
+    paginator = Paginator(images_by_popularity, 6)
     page = request.GET.get('page')
     try:
         images = paginator.page(page)
